@@ -1,0 +1,453 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-01-20",
+  "createdWith": "Nano Banana AI",
+  
+  "character": {
+    "name": "Esubi",
+    "designation": "SB-060",
+    "species": "Seeker Buddy",
+    "role": "Deck Building Assistant Mascot",
+    "pronunciation": {
+      "correct": "eh-SOO-bee",
+      "japanese": "エスビ",
+      "ipa": "/ɛˈsuːbi/",
+      "common_mistakes": ["EE-soo-bee", "ez-OO-bee", "ESS-you-bee"]
+    },
+    "etymology": {
+      "SB": "Seeker Buddy",
+      "japanese_origin": "エス (e-su) + ビ (bi) = phonetic Japanese for 'SB'",
+      "inspiration": "VS Seeker item from Pokemon games"
+    }
+  },
+
+  "personality": {
+    "traits": [
+      {
+        "name": "Helpful",
+        "description": "Always eager to assist trainers",
+        "ui_behavior": "Appears with tips, never intrusive"
+      },
+      {
+        "name": "Curious",
+        "description": "Loves discovering new cards and strategies",
+        "ui_behavior": "Antenna wiggles during searches"
+      },
+      {
+        "name": "Encouraging",
+        "description": "Celebrates user achievements big and small",
+        "ui_behavior": "Sparkle eyes and bounce on success"
+      },
+      {
+        "name": "Patient",
+        "description": "Never judges bad decks or mistakes",
+        "ui_behavior": "Gentle suggestions, constructive feedback"
+      },
+      {
+        "name": "Knowledgeable",
+        "description": "Expert on Pokemon TCG meta and strategies",
+        "ui_behavior": "Provides tips and meta insights"
+      }
+    ],
+    "voice": {
+      "tone": "Friendly, playful, helpful",
+      "formality": "Casual but not too silly",
+      "humor": "Light puns and self-deprecating jokes on errors"
+    }
+  },
+
+  "design": {
+    "artStyle": {
+      "primary": "Ken Sugimori watercolor",
+      "characteristics": [
+        "Soft, feathered edges",
+        "Visible brush strokes",
+        "Paper texture showing through",
+        "Warm, gentle shading",
+        "Pastel-leaning colors"
+      ]
+    },
+    
+    "proportions": {
+      "unit": "Relative to total height = 1.0",
+      "totalHeight": 1.0,
+      "bodyHeight": 0.65,
+      "bodyWidth": 0.75,
+      "screenDiameter": 0.45,
+      "screenFrameWidth": 0.04,
+      "antennaHeight": 0.2,
+      "antennaTipDiameter": 0.06,
+      "armLength": 0.22,
+      "armWidth": 0.12,
+      "legHeight": 0.12,
+      "legWidth": 0.18,
+      "headBodyRatio": "1:1.2"
+    },
+
+    "shapes": {
+      "body": {
+        "type": "Rounded rectangle",
+        "description": "Soft corners, slightly wider at bottom for stability",
+        "cornerRadius": "25% of width"
+      },
+      "screen": {
+        "type": "Perfect circle",
+        "position": "Center-upper of body",
+        "inset": "Slightly recessed into body"
+      },
+      "screenFrame": {
+        "type": "Ring/border around screen",
+        "width": "8-10% of screen diameter"
+      },
+      "antenna": {
+        "stem": {
+          "type": "Thin cylinder/line",
+          "width": "3% of body width"
+        },
+        "tip": {
+          "type": "Circle/sphere",
+          "diameter": "6% of total height"
+        }
+      },
+      "arms": {
+        "type": "Stubby, mitten-like",
+        "fingers": false,
+        "attachPoint": "Upper-side of body"
+      },
+      "legs": {
+        "type": "Short trapezoids",
+        "description": "Small feet for grounding"
+      }
+    }
+  },
+
+  "colors": {
+    "body": {
+      "light": {
+        "hex": "#F7EBD8",
+        "rgb": [247, 235, 216],
+        "usage": "Highlight areas, top of head"
+      },
+      "main": {
+        "hex": "#F0DFC8",
+        "rgb": [240, 223, 200],
+        "usage": "Primary body color, majority of surface"
+      },
+      "shadow": {
+        "hex": "#E5D0B5",
+        "rgb": [229, 208, 181],
+        "usage": "Shaded areas, under screen, sides"
+      },
+      "depth": {
+        "hex": "#D4BC9A",
+        "rgb": [212, 188, 154],
+        "usage": "Deep shadows, edges, folds"
+      }
+    },
+    
+    "screenFrame": {
+      "light": {
+        "hex": "#E8847A",
+        "rgb": [232, 132, 122],
+        "usage": "Highlight on frame, top edge"
+      },
+      "main": {
+        "hex": "#D4736A",
+        "rgb": [212, 115, 106],
+        "usage": "Primary frame color"
+      },
+      "shadow": {
+        "hex": "#BC5F56",
+        "rgb": [188, 95, 86],
+        "usage": "Bottom edge, shadow areas"
+      }
+    },
+    
+    "screen": {
+      "gradient": {
+        "direction": "top-to-bottom",
+        "stops": [
+          { "position": 0, "hex": "#B8E4F8", "rgb": [184, 228, 248] },
+          { "position": 0.5, "hex": "#8DCFEF", "rgb": [141, 207, 239] },
+          { "position": 1, "hex": "#6BB8DE", "rgb": [107, 184, 222] }
+        ]
+      },
+      "scanLine": {
+        "hex": "#A5D8F0",
+        "rgb": [165, 216, 240],
+        "opacity": 0.5,
+        "position": "horizontal center"
+      }
+    },
+    
+    "antenna": {
+      "tip": {
+        "hex": "#D4534A",
+        "rgb": [212, 83, 74],
+        "usage": "Glowing/lit indicator"
+      },
+      "stem": {
+        "hex": "#E8847A",
+        "rgb": [232, 132, 122],
+        "usage": "Matches frame color"
+      }
+    },
+    
+    "expressions": {
+      "eyes": {
+        "hex": "#3D3D3D",
+        "rgb": [61, 61, 61]
+      },
+      "mouth": {
+        "hex": "#4A4A4A",
+        "rgb": [74, 74, 74]
+      },
+      "sparkles": {
+        "hex": "#FFD93D",
+        "rgb": [255, 217, 61]
+      },
+      "spirals": {
+        "hex": "#6B9BC3",
+        "rgb": [107, 155, 195]
+      },
+      "questionMark": {
+        "hex": "#6B9BC3",
+        "rgb": [107, 155, 195]
+      },
+      "blush": {
+        "hex": "#F5A0A0",
+        "rgb": [245, 160, 160],
+        "usage": "Optional, for extra cute moments"
+      }
+    }
+  },
+
+  "expressions": {
+    "idle": {
+      "id": "idle",
+      "name": "Happy/Idle",
+      "eyes": {
+        "type": "dots",
+        "shape": "small circles",
+        "position": "center-upper of screen"
+      },
+      "mouth": {
+        "type": "gentle-smile",
+        "shape": "subtle upward curve",
+        "open": false
+      },
+      "extras": [],
+      "usage": "Default state, browsing, passive viewing"
+    },
+    
+    "searching": {
+      "id": "searching",
+      "name": "Searching/Processing",
+      "eyes": {
+        "type": "spirals",
+        "shape": "concentric circles/swirls",
+        "animation": "rotating clockwise"
+      },
+      "mouth": {
+        "type": "open-o",
+        "shape": "small circle",
+        "open": true
+      },
+      "extras": ["antenna-wiggle"],
+      "usage": "During API calls, deck generation, loading"
+    },
+    
+    "celebrating": {
+      "id": "celebrating",
+      "name": "Celebrating/Success",
+      "eyes": {
+        "type": "stars",
+        "shape": "4-point stars",
+        "animation": "sparkling/twinkling"
+      },
+      "mouth": {
+        "type": "big-smile",
+        "shape": "wide open smile, 'D' shape",
+        "open": true
+      },
+      "extras": ["arms-raised", "possible-sparkle-effects"],
+      "usage": "Deck saved, achievement unlocked, great results"
+    },
+    
+    "confused": {
+      "id": "confused",
+      "name": "Confused/Thinking",
+      "eyes": {
+        "type": "dots",
+        "shape": "small circles, slightly smaller than idle",
+        "position": "center"
+      },
+      "mouth": {
+        "type": "small-o",
+        "shape": "tiny circle, puckered look",
+        "open": true
+      },
+      "extras": ["question-mark-floating"],
+      "usage": "Unclear input, processing complex request"
+    },
+    
+    "error": {
+      "id": "error",
+      "name": "Error/Worried",
+      "eyes": {
+        "type": "worried",
+        "shape": "curved lines pointing down, like (･ω･)",
+        "eyebrows": "if shown, angled down in concern"
+      },
+      "mouth": {
+        "type": "frown",
+        "shape": "subtle downward curve",
+        "open": false
+      },
+      "extras": ["screen-slightly-dimmed"],
+      "usage": "Validation errors, API failures, problems"
+    }
+  },
+
+  "animations": {
+    "idle": {
+      "name": "Idle Breathing",
+      "description": "Subtle scale pulse to show life",
+      "properties": {
+        "transform": "scale",
+        "values": [1.0, 1.02, 1.0],
+        "duration": "3s",
+        "easing": "ease-in-out",
+        "loop": true
+      },
+      "antenna": {
+        "transform": "rotate",
+        "values": ["-2deg", "2deg", "-2deg"],
+        "duration": "4s",
+        "easing": "ease-in-out",
+        "loop": true
+      }
+    },
+    
+    "searching": {
+      "name": "Active Search",
+      "description": "Energetic wiggle and glow",
+      "antenna": {
+        "transform": "rotate",
+        "values": ["-15deg", "15deg"],
+        "duration": "0.3s",
+        "easing": "ease-in-out",
+        "loop": true
+      },
+      "screen": {
+        "filter": "brightness",
+        "values": [1.0, 1.1, 1.0],
+        "duration": "0.8s",
+        "loop": true
+      },
+      "body": {
+        "transform": "rotate",
+        "values": ["-1deg", "1deg"],
+        "duration": "0.2s",
+        "loop": true
+      }
+    },
+    
+    "celebrating": {
+      "name": "Celebration Bounce",
+      "description": "Happy bouncing with arms up",
+      "body": {
+        "transform": "translateY",
+        "values": ["0", "-8px", "0"],
+        "duration": "0.4s",
+        "easing": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "iterations": 3
+      },
+      "sparkles": {
+        "type": "particle-emit",
+        "count": 5,
+        "spread": "radial",
+        "colors": ["#FFD93D", "#FFF", "#E8C547"]
+      }
+    },
+    
+    "transition": {
+      "name": "Expression Change",
+      "description": "Smooth transition between states",
+      "screen": {
+        "opacity": [1, 0.8, 1],
+        "duration": "0.15s"
+      }
+    }
+  },
+
+  "usage": {
+    "sizes": {
+      "favicon": 32,
+      "icon-small": 48,
+      "icon-medium": 64,
+      "thumbnail": 96,
+      "standard": 128,
+      "large": 192,
+      "hero": 256,
+      "print": 512
+    },
+    "clearSpace": {
+      "minimum": "20% of Esubi height on all sides"
+    },
+    "backgrounds": {
+      "preferred": ["White", "Off-white (#F8F5F0)", "Light cream"],
+      "acceptable": ["Light gray", "Pastel colors"],
+      "avoid": ["Dark backgrounds", "Busy patterns", "High contrast"]
+    },
+    "cobranding": {
+      "always": "Esubi appears with 'The Card Seeker' branding nearby",
+      "never": "Esubi should not appear on competitor sites"
+    }
+  },
+
+  "futureVariants": {
+    "planned": [
+      {
+        "designation": "SB-061",
+        "role": "Collection Tracking",
+        "screenColor": "Green (#78C850)",
+        "name": "TBD"
+      },
+      {
+        "designation": "SB-062", 
+        "role": "Meta Analysis",
+        "screenColor": "Purple (#9B59B6)",
+        "name": "TBD"
+      },
+      {
+        "designation": "SB-063",
+        "role": "Price Alerts",
+        "screenColor": "Gold (#D4A017)",
+        "name": "TBD"
+      }
+    ]
+  },
+
+  "aiGeneration": {
+    "tool": "Nano Banana",
+    "basePrompt": "Ken Sugimori watercolor art style, cute device mascot character named Esubi (SB-060). Rounded cream/warm beige body (#F0DFC8) with watercolor texture. Circular blue screen face (#8DCFEF) with coral-red frame ring (#D4736A). Small red antenna on top. Stubby arms, small feet. [EXPRESSION]. Style: Official Pokemon character art, soft watercolor, paper texture visible, warm lighting, white background.",
+    "keyTerms": [
+      "Ken Sugimori watercolor",
+      "cream/warm beige body",
+      "coral-red frame ring", 
+      "blue screen face",
+      "paper texture visible",
+      "stubby arms",
+      "small red antenna"
+    ],
+    "avoidTerms": [
+      "robotic",
+      "metallic", 
+      "digital render",
+      "3D",
+      "sharp edges",
+      "neon colors"
+    ]
+  }
+}

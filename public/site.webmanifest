@@ -1,0 +1,21 @@
+{
+  "name": "The Card Seeker",
+  "short_name": "Card Seeker",
+  "description": "Build competitive Pokemon TCG decks around your favorite Pokemon",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8F5F0",
+  "theme_color": "#D4A017",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

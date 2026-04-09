@@ -1,0 +1,288 @@
+/* =============================================================================
+   ESUBI ANIMATIONS
+   Custom animations for our adorable mascot
+   ============================================================================= */
+
+/* Gentle breathing animation for idle state */
+@keyframes breathe {
+  0%, 100% { 
+    transform: scale(1); 
+  }
+  50% { 
+    transform: scale(1.02); 
+  }
+}
+
+/* Antenna/body wiggle for searching */
+@keyframes wiggle {
+  0%, 100% { 
+    transform: rotate(0deg); 
+  }
+  25% { 
+    transform: rotate(-3deg); 
+  }
+  75% { 
+    transform: rotate(3deg); 
+  }
+}
+
+/* Confused head tilt */
+@keyframes tilt {
+  0%, 100% { 
+    transform: rotate(0deg); 
+  }
+  25% { 
+    transform: rotate(-5deg); 
+  }
+  75% { 
+    transform: rotate(5deg); 
+  }
+}
+
+/* Bounce for celebrating */
+@keyframes esubi-bounce {
+  0%, 100% { 
+    transform: translateY(0); 
+  }
+  50% { 
+    transform: translateY(-10px); 
+  }
+}
+
+/* Sparkle effect for celebrations */
+@keyframes sparkle {
+  0%, 100% { 
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
+  }
+}
+
+/* Float in from bottom */
+@keyframes float-in {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Gentle floating hover */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Pulse glow for screen during search */
+@keyframes pulse-glow {
+  0%, 100% {
+    filter: brightness(1) drop-shadow(0 0 0 transparent);
+  }
+  50% {
+    filter: brightness(1.1) drop-shadow(0 0 10px rgba(141, 207, 239, 0.5));
+  }
+}
+
+/* Wave animation (for waving expression) */
+@keyframes wave {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-10deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+}
+
+/* Fade in for speech bubbles */
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =============================================================================
+   ESUBI COMPONENT CLASSES
+   ============================================================================= */
+
+.esubi-container {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.esubi-idle {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+.esubi-searching {
+  animation: wiggle 0.3s ease-in-out infinite, pulse-glow 1s ease-in-out infinite;
+}
+
+.esubi-celebrating {
+  animation: esubi-bounce 0.5s ease-in-out infinite;
+}
+
+.esubi-confused {
+  animation: tilt 2s ease-in-out infinite;
+}
+
+.esubi-waving {
+  animation: wave 0.5s ease-in-out 3;
+}
+
+.esubi-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* =============================================================================
+   SPEECH BUBBLE STYLES
+   ============================================================================= */
+
+.esubi-bubble {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  background: rgba(248, 245, 240, 0.95);
+  backdrop-filter: blur(8px);
+  border: 2px solid #D4A017;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  text-align: center;
+  max-width: 200px;
+  white-space: nowrap;
+  animation: fade-in 0.2s ease-out;
+  z-index: 10;
+}
+
+.esubi-bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: #D4A017 transparent transparent transparent;
+}
+
+/* =============================================================================
+   FLOATING ESUBI STYLES
+   ============================================================================= */
+
+.esubi-floating {
+  position: fixed;
+  z-index: 9999;
+  transition: all 0.3s ease;
+}
+
+.esubi-floating.bottom-right {
+  bottom: 24px;
+  right: 24px;
+}
+
+.esubi-floating.bottom-left {
+  bottom: 24px;
+  left: 24px;
+}
+
+.esubi-floating.top-right {
+  top: 24px;
+  right: 24px;
+}
+
+.esubi-floating.top-left {
+  top: 24px;
+  left: 24px;
+}
+
+.esubi-floating.collapsed {
+  opacity: 0.7;
+}
+
+.esubi-floating.collapsed:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* =============================================================================
+   SPARKLE EFFECTS
+   ============================================================================= */
+
+.esubi-sparkles {
+  position: absolute;
+  inset: -20px;
+  pointer-events: none;
+}
+
+.esubi-sparkle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #FFD93D;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation: sparkle 1s ease-in-out infinite;
+}
+
+.esubi-sparkle:nth-child(1) {
+  top: 10%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.esubi-sparkle:nth-child(2) {
+  top: 10%;
+  right: 10%;
+  animation-delay: 0.2s;
+}
+
+.esubi-sparkle:nth-child(3) {
+  bottom: 20%;
+  left: 5%;
+  animation-delay: 0.4s;
+}
+
+.esubi-sparkle:nth-child(4) {
+  bottom: 20%;
+  right: 5%;
+  animation-delay: 0.6s;
+}
+
+/* =============================================================================
+   INTERACTIVE STATES
+   ============================================================================= */
+
+.esubi-interactive {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.esubi-interactive:hover {
+  transform: scale(1.05) translateY(-2px);
+}
+
+.esubi-interactive:active {
+  transform: scale(0.98);
+}

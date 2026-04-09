@@ -1,0 +1,412 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===========================================
+   The Card Seeker - Global Styles
+   Ken Sugimori-inspired aesthetic
+   =========================================== */
+
+@layer base {
+  :root {
+    /* Card stock colors */
+    --card-white: 248 245 240;
+    --card-cream: 255 248 231;
+    --card-grey: 232 228 220;
+    --card-texture: 216 212 204;
+
+    /* Gold border */
+    --gold: 212 160 23;
+    --gold-light: 232 197 71;
+    --gold-dark: 184 134 11;
+
+    /* Seeker blue */
+    --seeker: 91 155 213;
+    --seeker-light: 124 179 232;
+    --seeker-dark: 64 128 192;
+
+    /* Text */
+    --text-primary: 26 26 26;
+    --text-secondary: 74 74 74;
+    --text-muted: 122 122 122;
+
+    /* Animation durations */
+    --duration-fast: 150ms;
+    --duration-normal: 250ms;
+    --duration-slow: 400ms;
+  }
+
+  /* Dark mode overrides */
+  .dark {
+    --card-white: 26 26 26;
+    --card-cream: 37 37 37;
+    --card-grey: 42 42 42;
+    --card-texture: 51 51 51;
+    --text-primary: 248 245 240;
+    --text-secondary: 184 184 184;
+    --text-muted: 136 136 136;
+  }
+
+  /* Base typography */
+  html {
+    font-family: var(--font-body), system-ui, sans-serif;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply text-[rgb(var(--text-primary))];
+    @apply antialiased;
+    
+    /* Base background color as fallback */
+    background-color: rgb(var(--card-white));
+    
+    /* Ensure minimum height */
+    min-height: 100vh;
+    position: relative;
+  }
+  
+  /* Watercolor background - flipped so light part is at top */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    
+    background-image: url('/textures/watercolor-bg.png');
+    background-size: 80% auto; /* Smaller = more texture detail visible */
+    background-position: center top;
+    background-repeat: repeat;
+    
+    /* Flip vertically so light part is at top */
+    transform: scaleY(-1);
+  }
+
+  /* Selection styling */
+  ::selection {
+    @apply bg-seeker/30;
+  }
+
+  /* Focus styling */
+  :focus-visible {
+    @apply outline-none ring-2 ring-seeker ring-offset-2 ring-offset-card-white;
+  }
+
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+@layer components {
+  /* ===========================================
+     Glass Panel - Our primary container style
+     =========================================== */
+  .glass-panel {
+    @apply relative overflow-hidden;
+    @apply bg-card-white/85 backdrop-blur-xl;
+    @apply border border-gold/30;
+    @apply rounded-card;
+    @apply shadow-glass;
+  }
+
+  .glass-panel-bordered {
+    @apply glass-panel;
+    @apply border-[3px] border-gold;
+    @apply shadow-gold;
+  }
+
+  /* ===========================================
+     Pokemon Card Component
+     =========================================== */
+  .pokemon-card {
+    @apply relative overflow-hidden;
+    @apply bg-card-cream;
+    @apply border-[3px] border-gold;
+    @apply rounded-lg;
+    @apply shadow-card;
+    @apply transition-all duration-300 ease-out;
+    transform-style: preserve-3d;
+  }
+
+  .pokemon-card:hover {
+    @apply -translate-y-2 shadow-card-hover;
+    transform: translateY(-8px) rotateX(5deg);
+  }
+
+  /* Holographic shimmer effect for rare cards */
+  .pokemon-card.holo::after {
+    content: '';
+    @apply absolute inset-0;
+    @apply opacity-0 pointer-events-none;
+    @apply transition-opacity duration-300;
+    background: linear-gradient(
+      105deg,
+      transparent 20%,
+      rgba(255, 255, 255, 0.3) 30%,
+      rgba(255, 200, 100, 0.2) 35%,
+      rgba(100, 200, 255, 0.2) 40%,
+      transparent 50%
+    );
+  }
+
+  .pokemon-card.holo:hover::after {
+    @apply opacity-100;
+    animation: holo-shimmer 1.5s ease infinite;
+  }
+
+  /* ===========================================
+     Buttons
+     =========================================== */
+  .btn {
+    @apply inline-flex items-center justify-center;
+    @apply font-display font-bold;
+    @apply px-6 py-3;
+    @apply rounded-lg;
+    @apply transition-all duration-200 ease-out;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn;
+    @apply bg-gold-gradient text-[rgb(var(--text-primary))];
+    @apply border-2 border-gold-dark;
+    box-shadow: 
+      0 2px 4px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    @apply -translate-y-0.5;
+    box-shadow: 
+      0 4px 12px rgba(212, 160, 23, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+
+  .btn-secondary {
+    @apply btn;
+    @apply bg-card-white/80 backdrop-blur-sm;
+    @apply border border-card-texture;
+    @apply text-[rgb(var(--text-primary))];
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    @apply bg-card-white border-gold/50;
+  }
+
+  .btn-seeker {
+    @apply btn;
+    @apply bg-seeker-gradient text-white;
+    @apply border-2 border-seeker-dark;
+  }
+
+  .btn-seeker:hover:not(:disabled) {
+    @apply -translate-y-0.5;
+    box-shadow: 0 4px 12px rgba(91, 155, 213, 0.4);
+  }
+
+  /* ===========================================
+     Input Fields
+     =========================================== */
+  .input-field {
+    @apply w-full;
+    @apply bg-card-white/90;
+    @apply border-2 border-card-texture;
+    @apply rounded-lg;
+    @apply px-4 py-3;
+    @apply font-body text-[rgb(var(--text-primary))];
+    @apply placeholder:text-[rgb(var(--text-muted))];
+    @apply transition-all duration-200;
+  }
+
+  .input-field:focus {
+    @apply border-gold;
+    @apply ring-2 ring-gold/20;
+    @apply outline-none;
+  }
+
+  .search-input {
+    @apply input-field;
+    @apply pl-11;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%237A7A7A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 14px center;
+  }
+
+  /* ===========================================
+     Energy Type Badges
+     =========================================== */
+  .energy-badge {
+    @apply inline-flex items-center justify-center;
+    @apply w-6 h-6;
+    @apply rounded-full;
+    @apply text-white text-xs font-bold;
+    box-shadow: 
+      0 2px 4px rgba(0, 0, 0, 0.15),
+      inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .energy-fire { @apply bg-pokemon-fire; }
+  .energy-water { @apply bg-pokemon-water; }
+  .energy-grass { @apply bg-pokemon-grass; }
+  .energy-electric { @apply bg-pokemon-electric; }
+  .energy-psychic { @apply bg-pokemon-psychic; }
+  .energy-fighting { @apply bg-pokemon-fighting; }
+  .energy-dark { @apply bg-pokemon-dark; }
+  .energy-steel { @apply bg-pokemon-steel; }
+  .energy-fairy { @apply bg-pokemon-fairy; }
+  .energy-dragon { @apply bg-pokemon-dragon; }
+  .energy-colorless { @apply bg-pokemon-colorless; }
+
+  /* ===========================================
+     Watercolor Background Effect
+     =========================================== */
+  .watercolor-bg {
+    @apply relative overflow-hidden;
+  }
+
+  .watercolor-bg::before {
+    content: '';
+    @apply absolute -inset-1/2;
+    @apply opacity-60;
+    @apply animate-watercolor;
+    filter: blur(60px);
+  }
+
+  .watercolor-bg.fire::before {
+    background: 
+      radial-gradient(ellipse at 20% 30%, rgba(240, 128, 48, 0.3) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 70%, rgba(255, 200, 120, 0.2) 0%, transparent 40%);
+  }
+
+  .watercolor-bg.water::before {
+    background: 
+      radial-gradient(ellipse at 20% 30%, rgba(104, 144, 240, 0.3) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 70%, rgba(150, 200, 255, 0.2) 0%, transparent 40%);
+  }
+
+  .watercolor-bg.grass::before {
+    background: 
+      radial-gradient(ellipse at 20% 30%, rgba(120, 200, 80, 0.3) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 70%, rgba(180, 230, 140, 0.2) 0%, transparent 40%);
+  }
+
+  /* ===========================================
+     Loading Skeleton
+     =========================================== */
+  .skeleton {
+    @apply bg-card-grey;
+    @apply rounded;
+    background: linear-gradient(
+      90deg,
+      rgb(var(--card-grey)) 25%,
+      rgb(var(--card-cream)) 50%,
+      rgb(var(--card-grey)) 75%
+    );
+    background-size: 200% 100%;
+    @apply animate-shimmer;
+  }
+
+  /* ===========================================
+     Typography Utilities
+     =========================================== */
+  .heading-display {
+    @apply font-display font-extrabold;
+    @apply tracking-tight;
+  }
+
+  .card-name {
+    @apply font-display font-bold;
+    @apply uppercase tracking-wide;
+  }
+
+  .stat-text {
+    @apply font-mono font-medium;
+  }
+
+  .hp-text {
+    @apply font-display font-extrabold;
+    @apply text-error;
+  }
+}
+
+@layer utilities {
+  /* Paper texture overlay utility */
+  .paper-texture {
+    @apply relative;
+  }
+
+  .paper-texture::before {
+    content: '';
+    @apply absolute inset-0;
+    @apply opacity-30 pointer-events-none;
+    @apply mix-blend-multiply;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  /* Text shadow for readability on varied backgrounds */
+  .text-shadow {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ===========================================
+   Esubi Animation Keyframes
+   =========================================== */
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-3deg); }
+  75% { transform: rotate(3deg); }
+}
+
+@keyframes tilt {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.1) drop-shadow(0 0 10px rgba(141, 207, 239, 0.5)); }
+}
+
+/* ===========================================
+   Reduced Motion Preference
+   =========================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Pokemon Card Style Font */
+.font-pokemon {
+  font-family: "Gill Sans", "Gill Sans MT", "Barlow Condensed", system-ui, sans-serif;
+  font-weight: 700;
+}
