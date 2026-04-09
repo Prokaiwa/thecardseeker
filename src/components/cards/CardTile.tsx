@@ -28,8 +28,8 @@ interface CardTileProps {
 
 export default function CardTile({ card, onClick, onAdd, size = 'md' }: CardTileProps) {
   const isSmall = size === 'sm';
-  // card.image is already the full base URL from TCGdex; append quality suffix directly
-  const imageUrl = card.image ? `${card.image}/high` : null;
+  // card.image is the base URL from TCGdex; /high.webp gives the actual image file
+  const imageUrl = card.image ? `${card.image}/high.webp` : null;
 
   return (
     <div

@@ -4,8 +4,6 @@ import { useEffect } from 'react';
 import Image from 'next/image';
 import { X, Plus, ExternalLink, Shield, Zap, Swords } from 'lucide-react';
 import type { TcgdexCard } from '@/lib/ingestion';
-import { getCardImageUrl } from '@/lib/ingestion';
-
 interface CardDetailModalProps {
   card: TcgdexCard;
   onClose: () => void;
@@ -13,7 +11,7 @@ interface CardDetailModalProps {
 }
 
 export default function CardDetailModal({ card, onClose, onAdd }: CardDetailModalProps) {
-  const imageUrl = card.image ? getCardImageUrl(card.image, { quality: 'high' }) : null;
+  const imageUrl = card.image ? `${card.image}/high.webp` : null;
 
   // Close on Escape
   useEffect(() => {
