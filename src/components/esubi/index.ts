@@ -10,6 +10,3 @@ export {
   type EsubiSize,
   type FloatingEsubiProps,
 } from './Esubi';
-
-// Import CSS (will be bundled)
-import './esubi.css';

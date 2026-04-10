@@ -76,7 +76,7 @@
     z-index: -1;
     
     background-image: url('/textures/watercolor-bg.png');
-    background-size: 80% auto; /* Smaller = more texture detail visible */
+    background-size: 320px auto;
     background-position: center top;
     background-repeat: repeat;
     

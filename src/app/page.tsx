@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Navbar from '@/components/layout/Navbar';
+import FeaturedCards from '@/components/cards/FeaturedCards';
 
 export default function HomePage() {
   return (
@@ -78,6 +79,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Featured Cards */}
+      <FeaturedCards />
 
       {/* Features Section */}
       <section className="relative z-10 border-t border-gold/10 bg-card-cream/40 py-24 backdrop-blur-sm">

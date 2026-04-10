@@ -1,5 +1,6 @@
 'use client';
 
+import './esubi.css';
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';

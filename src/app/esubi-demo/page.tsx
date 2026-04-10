@@ -63,7 +63,7 @@ export default function EsubiDemoPage() {
               Meet Esubi (SB-060)
             </h1>
             <p className="text-[rgb(var(--text-secondary))] text-lg">
-              Your friendly Seeker Buddy • Pronounced "eh-SOO-bee" (エスビ)
+              Your friendly Seeker Buddy • Pronounced &quot;eh-SOO-bee&quot; (エスビ)
             </p>
           </div>
 
@@ -152,7 +152,7 @@ export default function EsubiDemoPage() {
               Global State Control
             </h2>
             <p className="text-[rgb(var(--text-secondary))] mb-6">
-              These buttons control the floating Esubi in the corner. This is how you'd 
+              These buttons control the floating Esubi in the corner. This is how you&apos;d
               trigger Esubi reactions from anywhere in your app!
             </p>
             
