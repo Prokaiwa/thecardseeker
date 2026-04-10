@@ -1,0 +1,53 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-04-10T00:58:28.589Z",
+  "phase": null,
+  "phase_name": "iterative-polish",
+  "phase_dir": null,
+  "plan": null,
+  "task": null,
+  "total_tasks": null,
+  "status": "paused",
+  "completed_tasks": [
+    {"id": 1, "name": "Fix searchCards query format (: → =)", "status": "done", "commit": "2a2eba9"},
+    {"id": 2, "name": "Add initial load (Prismatic Evolutions set on mount)", "status": "done", "commit": "2a2eba9"},
+    {"id": 3, "name": "Add typeahead autocomplete (debounced, deduped by name)", "status": "done", "commit": "2a2eba9"},
+    {"id": 4, "name": "Fix card images (add .webp extension to TCGdex URLs)", "status": "done", "commit": "84646fb"},
+    {"id": 5, "name": "Fix CardDetailModal same image bug", "status": "done", "commit": "84646fb"},
+    {"id": 6, "name": "Fix ChunkLoadError (move esubi.css import to 'use client' file)", "status": "done", "commit": "25a369f"},
+    {"id": 7, "name": "Create /cards/[id] server-rendered detail page", "status": "done", "commit": "25a369f"},
+    {"id": 8, "name": "Add FeaturedCards component to homepage (card fan from sv08.5)", "status": "done", "commit": "25a369f"},
+    {"id": 9, "name": "Fix background texture (80% → 320px, subtle tiling)", "status": "done", "commit": "25a369f"},
+    {"id": 10, "name": "Fix ESLint (eslint-config-prettier, @typescript-eslint plugin, entities)", "status": "done", "commit": "25a369f"},
+    {"id": 11, "name": "Initialize git repo and connect to GitHub (prokaiwa/thecardseeker)", "status": "done", "commit": "2a2eba9"}
+  ],
+  "remaining_tasks": [
+    {"id": 12, "name": "Supabase auth (signup/login pages, session handling, protect routes)", "status": "not_started"},
+    {"id": 13, "name": "Wire 'Save deck' in /deck-builder (requires auth)", "status": "not_started"},
+    {"id": 14, "name": "Deploy to Vercel + set env vars", "status": "not_started"},
+    {"id": 15, "name": "Deck detail page /decks/[id]", "status": "not_started"}
+  ],
+  "blockers": [],
+  "human_actions_pending": [
+    {
+      "action": "Set up Supabase project and add env vars to .env.local",
+      "context": "Auth and deck saving require NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY. supabase/schema.sql exists and is ready to run.",
+      "blocking": true
+    },
+    {
+      "action": "Deploy to Vercel and configure environment variables",
+      "context": "Project builds clean. Just needs Vercel project creation and env vars set in dashboard.",
+      "blocking": false
+    }
+  ],
+  "decisions": [
+    {"decision": "TCGdex image URLs need .webp extension — /high returns HTML, /high.webp returns image/webp", "rationale": "Discovered via curl -sI. All image rendering now uses card.image + '/high.webp'", "phase": "polish"},
+    {"decision": "esubi.css must be imported inside Esubi.tsx ('use client'), not from index.ts barrel", "rationale": "CSS import in non-client barrel causes chunk hash instability and ChunkLoadError on navigation", "phase": "polish"},
+    {"decision": "FeaturedCards loads client-side (useEffect) not server-side", "rationale": "Avoids blocking homepage SSR on external API call; page renders immediately", "phase": "polish"},
+    {"decision": "searchCards uses URLSearchParams (= separator), not manual string concatenation (: separator)", "rationale": "TCGdex v2 API uses standard query params. Colon format returned empty array silently.", "phase": "polish"},
+    {"decision": "Background texture: 320px fixed size instead of 80% viewport", "rationale": "80% was too large/overpowering; 320px gives tight subtle tiling", "phase": "polish"}
+  ],
+  "uncommitted_files": [],
+  "next_action": "Set up Supabase project, add env vars to .env.local, then implement auth (signup/login pages + session middleware).",
+  "context_notes": "Codebase is in good shape. Build is clean (0 errors). Repo is live at github.com/Prokaiwa/thecardseeker. All core pages work. The card browser has live search, typeahead, initial load, and working images. Card detail page exists at /cards/[id]. The main gap blocking core value is auth — without it, decks can't be saved. supabase/schema.sql is already written and ready to run."
+}
