@@ -24,12 +24,13 @@ interface CardTileProps {
   onClick?: () => void;
   onAdd?: () => void;
   size?: 'sm' | 'md';
+  setName?: string;
 }
 
-export default function CardTile({ card, onClick, onAdd, size = 'md' }: CardTileProps) {
+export default function CardTile({ card, onClick, onAdd, size = 'md', setName }: CardTileProps) {
   const isSmall = size === 'sm';
-  // card.image is the base URL from TCGdex; /high.webp gives the actual image file
-  const imageUrl = card.image ? `${card.image}/high.webp` : null;
+  // Use /low.webp for grid thumbnails — much smaller files, loads faster
+  const imageUrl = card.image ? `${card.image}/low.webp` : null;
 
   return (
     <div
@@ -52,6 +53,7 @@ export default function CardTile({ card, onClick, onAdd, size = 'md' }: CardTile
             fill
             className="object-cover"
             sizes={isSmall ? '120px' : '180px'}
+            unoptimized
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
@@ -85,10 +87,15 @@ export default function CardTile({ card, onClick, onAdd, size = 'md' }: CardTile
         >
           {card.name}
         </h3>
-        <div className="flex items-center justify-between">
-          <span className={`text-[10px] text-[rgb(var(--text-muted))]`}>
-            {card.localId}
+        <div className="flex items-center justify-between gap-1">
+          <span className="text-[10px] text-[rgb(var(--text-muted))] shrink-0">
+            #{card.localId}
           </span>
+          {setName && (
+            <span className="truncate text-[10px] text-[rgb(var(--text-muted))] text-right">
+              {setName}
+            </span>
+          )}
         </div>
       </div>
     </div>

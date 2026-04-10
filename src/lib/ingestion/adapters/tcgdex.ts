@@ -160,6 +160,7 @@ export interface TcgdexSetBrief {
   name: string;
   logo?: string;
   symbol?: string;
+  releaseDate?: string;
   cardCount?: {
     official: number;
     total: number;
@@ -220,7 +221,9 @@ export interface TcgdexCardSearchParams {
   rarity?: string;
   illustrator?: string;
   regulationMark?: string;
-  // Pagination (not supported by TCGdex - returns all matches)
+  set?: string;                // set.id — e.g., "sv08.5"
+  weakness?: string;           // weaknesses.type — e.g., "Fire"
+  resistance?: string;         // resistances.type — e.g., "Water"
 }
 
 export async function searchCards(
@@ -237,6 +240,9 @@ export async function searchCards(
   if (params.rarity) searchParams.set('rarity', params.rarity);
   if (params.illustrator) searchParams.set('illustrator', params.illustrator);
   if (params.regulationMark) searchParams.set('regulationMark', params.regulationMark);
+  if (params.set) searchParams.set('set.id', params.set);
+  if (params.weakness) searchParams.set('weaknesses.type', params.weakness);
+  if (params.resistance) searchParams.set('resistances.type', params.resistance);
 
   const queryString = searchParams.toString();
   const url = queryString

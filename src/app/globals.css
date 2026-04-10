@@ -101,6 +101,19 @@
 
 @layer components {
   /* ===========================================
+     Filter form utilities
+     =========================================== */
+  .filter-label {
+    @apply mb-1.5 block text-[11px] font-semibold uppercase tracking-wider;
+    @apply text-[rgb(var(--text-muted))];
+  }
+
+  .filter-input {
+    @apply w-full rounded-xl border border-gold/20 bg-card-white px-3 py-2 text-sm;
+    @apply text-[rgb(var(--text-primary))] focus:border-gold/40 focus:outline-none;
+  }
+
+  /* ===========================================
      Glass Panel - Our primary container style
      =========================================== */
   .glass-panel {
