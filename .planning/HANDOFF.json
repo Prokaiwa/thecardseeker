@@ -1,39 +1,35 @@
 {
   "version": "1.0",
-  "timestamp": "2026-04-10T04:13:55.637Z",
+  "timestamp": "2026-04-10T05:57:42.143Z",
   "phase": null,
-  "phase_name": "card-browser-polish",
+  "phase_name": "card-browser-polish-2",
   "phase_dir": null,
   "plan": null,
   "task": null,
   "total_tasks": null,
   "status": "paused",
   "completed_tasks": [
-    {"id": 1, "name": "Supabase auth (signup/login, session middleware, protect routes)", "status": "not_started"},
-    {"id": 2, "name": "Wire 'Save deck' in /deck-builder", "status": "not_started"},
-    {"id": 3, "name": "Deploy to Vercel", "status": "not_started"},
-    {"id": 4, "name": "Deck detail page /decks/[id]", "status": "not_started"},
-    {"id": 5, "name": "Switch grid images to /low.webp + unoptimized (faster load)", "status": "done"},
-    {"id": 6, "name": "Dynamic featured set — fetch all sets, sort by recency, load newest", "status": "done"},
-    {"id": 7, "name": "Search results sorted newest→oldest", "status": "done"},
-    {"id": 8, "name": "Typeahead suggestions sorted newest→oldest", "status": "done"},
-    {"id": 9, "name": "Powerful filters: set, supertype, type, stage, rarity, artist, weakness, resistance, regulation mark", "status": "done"},
-    {"id": 10, "name": "View modes: grid / list / table with icons", "status": "done"},
-    {"id": 11, "name": "Pagination: 20/50/100/All selector + bottom Previous/Next/page-number controls", "status": "done"},
-    {"id": 12, "name": "Card tile: # prefix on localId, set name displayed", "status": "done"},
-    {"id": 13, "name": "Set logo shown in featured header", "status": "done"},
-    {"id": 14, "name": "SVG energy icons (inline, no external deps) for attack costs", "status": "done"},
-    {"id": 15, "name": "Retreat cost shows Colorless energy icons instead of number", "status": "done"},
-    {"id": 16, "name": "Trainer cards: dedicated seeker-blue effect section with trainerType label", "status": "done"},
-    {"id": 17, "name": "Weakness/resistance show energy icon + value", "status": "done"},
-    {"id": 18, "name": "filter-label / filter-input CSS utilities added to globals.css", "status": "done"},
-    {"id": 19, "name": "Set sort fixed: direct string comparison instead of localeCompare, era-priority fallback", "status": "done"}
+    {"id": 1, "name": "Download real energy type SVGs to /public/icons/energy/", "status": "done"},
+    {"id": 2, "name": "Replace inline SVG EnergyIcon with image-based component (PNG)", "status": "done"},
+    {"id": 3, "name": "Fix featured set: pokemontcg.io release dates enrich TCGdex set sort", "status": "done"},
+    {"id": 4, "name": "SKIP_FEATURED regex excludes promo/energy sets from featured slot", "status": "done"},
+    {"id": 5, "name": "ERA_ORDER expanded: me/ecard/neo/gym/si/lc/base for correct filter ordering", "status": "done"},
+    {"id": 6, "name": "Normalize 'pokemon' to 'Pokémon' in search", "status": "done"},
+    {"id": 7, "name": "Trainer/Energy modal: effect box shown even when effect text missing", "status": "done"},
+    {"id": 8, "name": "Modal: removed Shield/Swords icons from abilities/attacks", "status": "done"},
+    {"id": 9, "name": "Modal: ability type label (Ability/Poké-Power) now red", "status": "done"},
+    {"id": 10, "name": "Modal: Weakness/Resistance/Retreat always shown for Pokemon with dash fallback", "status": "done"},
+    {"id": 11, "name": "Modal: card info grid (Artist, Rarity, Language, Number, Expansion, Series) for all cards", "status": "done"},
+    {"id": 12, "name": "Page: Jump to top button at bottom of card list", "status": "done"},
+    {"id": 13, "name": "Page: Reset to featured set button after search", "status": "done"},
+    {"id": 14, "name": "Supplement TCGdex weakness/resistance/retreat from pokemontcg.io on card open", "status": "done"}
   ],
   "remaining_tasks": [
-    {"id": 20, "name": "Supabase auth (signup/login pages, session handling, protect routes)", "status": "not_started"},
-    {"id": 21, "name": "Wire 'Save deck' in /deck-builder (requires auth)", "status": "not_started"},
-    {"id": 22, "name": "Deploy to Vercel + set env vars", "status": "not_started"},
-    {"id": 23, "name": "Deck detail page /decks/[id]", "status": "not_started"}
+    {"id": 15, "name": "Supabase auth (signup/login pages, session handling, protect routes)", "status": "not_started"},
+    {"id": 16, "name": "Wire Save deck in /deck-builder (requires auth)", "status": "not_started"},
+    {"id": 17, "name": "Deploy to Vercel + set env vars", "status": "not_started"},
+    {"id": 18, "name": "Deck detail page /decks/[id]", "status": "not_started"},
+    {"id": 19, "name": "Investigate search result sort order edge cases (Base Set cards)", "status": "not_started"}
   ],
   "blockers": [],
   "human_actions_pending": [
@@ -49,20 +45,17 @@
     }
   ],
   "decisions": [
-    {"decision": "Grid images use /low.webp + unoptimized; modal keeps /high.webp", "rationale": "Low-res sufficient for thumbnails, eliminates Next.js proxy overhead", "phase": "card-browser-polish"},
-    {"decision": "SVG inline energy icons instead of external image URLs", "rationale": "TCGdex type image URL pattern unverified; SVGs are reliable, instant, zero deps", "phase": "card-browser-polish"},
-    {"decision": "Set sort uses direct string > comparison not localeCompare", "rationale": "localeCompare is locale-sensitive and may break YYYY/MM/DD date format ordering", "phase": "card-browser-polish"},
-    {"decision": "Era-priority scoring fallback (sv > swsh > sm > xy > ...) when releaseDate absent", "rationale": "TCGdex brief set response may not include releaseDate; ID-based score is reliable proxy", "phase": "card-browser-polish"},
-    {"decision": "Trainer effect shown in dedicated seeker-blue box, not mixed with Pokemon flavor text", "rationale": "Original code showed effect as flavor text + duplicated it in effect section", "phase": "card-browser-polish"},
-    {"decision": "filter-label and filter-input as @layer components CSS utilities", "rationale": "DRY — used across 9 filter inputs in the panel", "phase": "card-browser-polish"}
+    {"decision": "EnergyIcon uses user-provided PNG files from /public/icons/energy/ — no CSS circle wrapper", "rationale": "User downloaded official circular energy symbols with background already baked in", "phase": "card-browser-polish-2"},
+    {"decision": "pokemontcg.io used as secondary source for set release dates (name→date map)", "rationale": "TCGdex brief set endpoint returns no release dates; ptcgio has accurate dates by set name", "phase": "card-browser-polish-2"},
+    {"decision": "Supplement TCGdex card weakness/resistance/retreat from pokemontcg.io on card open", "rationale": "TCGdex omits these fields for modern sets (sv10, me03 confirmed missing weaknesses); ptcgio has complete data", "phase": "card-browser-polish-2"},
+    {"decision": "Series name derived from set ID prefix in modal (me→Mega Evolution, sv→Scarlet & Violet, etc.)", "rationale": "TCGdex card endpoint does not include serie in the set field returned on card detail", "phase": "card-browser-polish-2"},
+    {"decision": "Perfect Order (me03) correctly featured — TCGdex now indexes it; ptcgio date enrichment ranks it first", "rationale": "TCGdex uses me prefix for Mega Evolution era; sort by release date works correctly", "phase": "card-browser-polish-2"}
   ],
   "uncommitted_files": [
     "src/app/cards/page.tsx",
-    "src/app/globals.css",
     "src/components/cards/CardDetailModal.tsx",
-    "src/components/cards/CardTile.tsx",
-    "src/lib/ingestion/adapters/tcgdex.ts"
+    "public/icons/energy/ (11 PNG files)"
   ],
-  "next_action": "Ask user if they have Supabase set up. If yes, get env vars and implement auth end-to-end. If no, guide through setup then implement: install @supabase/supabase-js + @supabase/ssr, create src/lib/supabase/ utilities, build /signup and /login pages, add middleware.ts, protect /decks and /dashboard, wire Save Deck button.",
-  "context_notes": "Card browser is now in excellent shape. Build is clean (0 TS errors). All polish tasks done this session: fast image loading, dynamic newest-set featured display, powerful 9-field filter panel, grid/list/table views, real bottom pagination, SVG energy icons, retreat cost icons, trainer card info. The featured set may still show wrong set depending on what TCGdex returns — if so, the era-priority fallback should handle sv-era sets correctly. Main gap: auth. supabase/schema.sql already written and ready."
+  "next_action": "Ask user if they have Supabase set up. If yes, get env vars and implement auth end-to-end: install @supabase/supabase-js + @supabase/ssr, create src/lib/supabase/ utilities, build /signup and /login pages, add middleware.ts, protect /decks and /dashboard, wire Save Deck button.",
+  "context_notes": "Card browser is in excellent shape. Build is clean (0 TS errors). pokemontcg.io is used as secondary source: (1) release dates for set ordering on mount, (2) weakness/resistance/retreat supplement on card detail open — silent fallback if ptcgio fails. TCGdex is primary card data source. Energy icons are real PNGs from user in /public/icons/energy/. Modal now shows complete card info grid for all card types including trainer/energy. Jump-to-top and Reset-to-featured-set buttons added to bottom of card list."
 }

@@ -54,31 +54,77 @@ const EMPTY_FILTERS: Filters = {
 
 // ─── Set ordering helpers ─────────────────────────────────────────────────────
 
-// Era priority: index 0 = most recent era. Higher score = newer set.
-const ERA_ORDER = ['sv','swsh','sm','xy','bw','hgss','dp','ex','rs','base'] as const;
+// Era priority fallback when no release date is available.
+// Order: newest era first. Must list longer prefixes before shorter ones where ambiguous.
+const ERA_ORDER = [
+  'me',    // Mega Evolution (2025+)
+  'sv',    // Scarlet & Violet (2023)
+  'swsh',  // Sword & Shield (2020)
+  'sm',    // Sun & Moon (2017)
+  'xy',    // XY (2014)
+  'bw',    // Black & White (2011)
+  'hgss',  // HeartGold SoulSilver (2010)
+  'dp',    // Diamond & Pearl (2007)
+  'ex',    // EX era (2003)
+  'rs',    // Ruby & Sapphire (2003)
+  'ecard', // e-Card (2002) — must precede 'base' (no conflict)
+  'lc',    // Legendary Collection (2002)
+  'neo',   // Neo (2000)
+  'gym',   // Gym (2000)
+  'si',    // Southern Islands (2001)
+  'base',  // Base / Fossil / Jungle (1999)
+] as const;
 
 function setRecencyScore(setId: string): number {
   const id = setId.toLowerCase();
   const eraIdx = ERA_ORDER.findIndex((e) => id.startsWith(e));
-  const eraPriority = eraIdx === -1 ? -1 : ERA_ORDER.length - eraIdx; // higher = newer
+  const eraPriority = eraIdx === -1 ? -1 : ERA_ORDER.length - eraIdx;
   const numMatch = id.match(/(\d+(?:\.\d+)?)/);
   const num = numMatch ? parseFloat(numMatch[1]) : 0;
   return eraPriority * 1000 + num;
 }
 
-function sortSetsByRecency(sets: TcgdexSetBrief[]): TcgdexSetBrief[] {
+// Fetch release dates from pokemontcg.io (has accurate dates; TCGdex brief doesn't).
+// Returns name → YYYY-MM-DD map.
+async function fetchPtcgioReleaseDates(): Promise<Record<string, string>> {
+  try {
+    const res = await fetch(
+      'https://api.pokemontcg.io/v2/sets?orderBy=-releaseDate&pageSize=250',
+      { next: { revalidate: 86400 } } as RequestInit,
+    );
+    const data = await res.json();
+    const map: Record<string, string> = {};
+    for (const s of data.data ?? []) {
+      // Normalize "2025/03/28" → "2025-03-28" for consistent comparison
+      map[s.name as string] = (s.releaseDate as string).replace(/\//g, '-');
+    }
+    return map;
+  } catch {
+    return {};
+  }
+}
+
+function sortSetsByRecency(
+  sets: TcgdexSetBrief[],
+  nameToDate: Record<string, string> = {},
+): TcgdexSetBrief[] {
   return [...sets].sort((a, b) => {
-    // Use direct string comparison (works for both YYYY-MM-DD and YYYY/MM/DD)
-    if (a.releaseDate && b.releaseDate) {
-      if (b.releaseDate > a.releaseDate) return 1;
-      if (b.releaseDate < a.releaseDate) return -1;
+    // Prefer pokemontcg.io date by name lookup, then TCGdex date, then era score
+    const aDate = nameToDate[a.name] ?? a.releaseDate ?? '';
+    const bDate = nameToDate[b.name] ?? b.releaseDate ?? '';
+    if (aDate && bDate) {
+      if (bDate > aDate) return 1;
+      if (bDate < aDate) return -1;
       return 0;
     }
-    if (a.releaseDate) return -1;
-    if (b.releaseDate) return 1;
+    if (aDate) return -1;
+    if (bDate) return 1;
     return setRecencyScore(b.id) - setRecencyScore(a.id);
   });
 }
+
+// Skip promo/energy-only sets from featured position — they aren't main releases.
+const SKIP_FEATURED = /^(svp|sve|swshp|smp|xyp|bwp|hgssp|dpp|exp|rsp|basep|jumbo|wp|sp|bog)$/i;
 
 function getSetIdFromCardId(cardId: string): string {
   const idx = cardId.lastIndexOf('-');
@@ -162,6 +208,7 @@ export default function CardBrowserPage() {
   const suggestDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
+  const topRef = useRef<HTMLDivElement>(null);
 
   const totalPages = pageSize === 'all' ? 1 : Math.ceil(allCards.length / (pageSize as number));
   const startIdx = pageSize === 'all' ? 0 : (currentPage - 1) * (pageSize as number);
@@ -170,25 +217,28 @@ export default function CardBrowserPage() {
     : allCards.slice(startIdx, startIdx + (pageSize as number));
   const hasActiveFilters = Object.values(filters).some(Boolean);
 
-  // ── On mount: fetch all sets, build maps, load most recent ─────────────────
+  // ── On mount: fetch all sets + real release dates, load most recent ──────────
   useEffect(() => {
     esubiSearch();
-    fetchAllSets().then((res) => {
+    Promise.all([fetchAllSets(), fetchPtcgioReleaseDates()]).then(([res, nameToDate]) => {
       if (!res.data?.length) { esubiIdle(); return; }
 
-      const sorted = sortSetsByRecency(res.data);
+      // Sort with real dates from pokemontcg.io enriching the sort
+      const sorted = sortSetsByRecency(res.data, nameToDate);
       setAllSets(sorted);
 
+      // Build date map: prefer pokemontcg.io date (by name) over TCGdex field
       const dateMap: Record<string, string> = {};
       const nameMap: Record<string, string> = {};
       for (const s of res.data) {
-        if (s.releaseDate) dateMap[s.id] = s.releaseDate;
+        dateMap[s.id] = nameToDate[s.name] ?? s.releaseDate ?? '';
         nameMap[s.id] = s.name;
       }
       setSetDateMap(dateMap);
       setSetNameMap(nameMap);
 
-      const newest = sorted[0];
+      // Pick newest non-promo, non-energy set
+      const newest = sorted.find((s) => !SKIP_FEATURED.test(s.id)) ?? sorted[0];
       const logoUrl = newest.logo
         ? newest.logo + '.webp'
         : getSetLogoUrl(newest.id) + '.webp';
@@ -250,7 +300,11 @@ export default function CardBrowserPage() {
     startTransition(async () => {
       setError(null); setFeaturedLabel(''); setFeaturedLogoUrl(null);
       const params: Record<string, string> = {};
-      if (f.name.trim()) params.name = f.name.trim();
+      // Normalize plain ASCII "e" in common Pokémon words so searches like
+      // "pokemon" or "Eevee" still work without the accented é.
+      const normalizeName = (n: string) =>
+        n.replace(/pokemon/gi, 'Pokémon').replace(/pokebeach/gi, 'Pokébeach');
+      if (f.name.trim()) params.name = normalizeName(f.name.trim());
       if (f.category) params.category = f.category;
       if (f.types) params.types = f.types;
       if (f.stage) params.stage = f.stage;
@@ -279,11 +333,50 @@ export default function CardBrowserPage() {
     setSuggestions([]); setShowSuggestions(false);
   };
 
+  // Full reset — clears all filters AND reloads the featured set
+  const resetToFeatured = useCallback(() => {
+    setFilters(EMPTY_FILTERS);
+    setSuggestions([]); setShowSuggestions(false);
+    setError(null); setCurrentPage(1); setHasSearched(false);
+    if (!allSets.length) return;
+    const newest = allSets.find((s) => !SKIP_FEATURED.test(s.id)) ?? allSets[0];
+    const logoUrl = newest.logo ? newest.logo + '.webp' : getSetLogoUrl(newest.id) + '.webp';
+    setFeaturedLogoUrl(logoUrl);
+    esubiSearch();
+    fetchSet(newest.id).then((setRes) => {
+      if (setRes.data?.cards?.length) {
+        setAllCards(sortCardsByRelease(setRes.data.cards, setDateMap));
+        setFeaturedLabel(setRes.data.name ?? newest.name);
+      }
+      esubiIdle();
+    });
+  }, [allSets, setDateMap, esubiSearch, esubiIdle]);
+
   const openCardDetail = async (card: TcgdexCardBrief) => {
     setLoadingDetail(true);
     const res = await fetchCard(card.id);
+    if (res.data) {
+      const tcg = res.data;
+      // TCGdex often omits weaknesses/resistances for modern sets — supplement from pokemontcg.io
+      if (!tcg.weaknesses && !tcg.resistances && tcg.set?.name) {
+        try {
+          const q = encodeURIComponent(`name:"${tcg.name}" set.name:"${tcg.set.name}"`);
+          const ptcg = await fetch(`https://api.pokemontcg.io/v2/cards?q=${q}&pageSize=5`).then((r) => r.json());
+          const match = (ptcg.data ?? []).find(
+            (c: { localId?: string; number?: string }) =>
+              String(c.number ?? c.localId) === String(tcg.localId).replace(/^0+/, ''),
+          ) ?? ptcg.data?.[0];
+          if (match) {
+            if (match.weaknesses?.length)   tcg.weaknesses   = match.weaknesses;
+            if (match.resistances?.length)  tcg.resistances  = match.resistances;
+            if (match.retreatCost?.length && tcg.retreat == null)
+              tcg.retreat = match.retreatCost.length;
+          }
+        } catch { /* silently ignore — display whatever TCGdex provided */ }
+      }
+      setSelectedCard(tcg);
+    }
     setLoadingDetail(false);
-    if (res.data) setSelectedCard(res.data);
   };
 
   const isInitialLoad = !hasSearched && !isPending && !error;
@@ -293,6 +386,7 @@ export default function CardBrowserPage() {
     <div className="min-h-screen">
       <Navbar />
       <main className="mx-auto max-w-7xl px-4 py-10">
+        <div ref={topRef} />
 
         {/* ── Header ── */}
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -759,6 +853,26 @@ export default function CardBrowserPage() {
                 >
                   Next {pageSize}
                 </button>
+              </div>
+            )}
+
+            {/* Jump to top + Reset — shown when there are cards */}
+            {allCards.length > 0 && (
+              <div className="mt-6 flex items-center justify-center gap-3">
+                <button
+                  onClick={() => topRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                  className="rounded-xl border border-gold/30 bg-card-white/85 px-4 py-2 text-sm font-medium text-[rgb(var(--text-secondary))] transition-colors hover:border-gold/60 hover:bg-gold/5"
+                >
+                  Jump to top
+                </button>
+                {hasSearched && (
+                  <button
+                    onClick={resetToFeatured}
+                    className="rounded-xl border border-seeker/30 bg-seeker/5 px-4 py-2 text-sm font-medium text-seeker transition-colors hover:bg-seeker/10"
+                  >
+                    Reset to featured set
+                  </button>
+                )}
               </div>
             )}
           </>
